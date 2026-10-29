@@ -16,6 +16,6 @@ class Perfumes(models.Model):
 
     tipoPerfume = fields.Selection([('edt','EDT'),('edp','EDP'),('extracto','EXTRACTO')],string="Tipo_de_Perfume")
 
-    grupo_id = fields.Many2one('modulo_perfumeria.grupo', string='Grupo')
+    grupo_id = fields.Many2one('modulo_perfumeria.grupo', string='Grupos')
 
     
