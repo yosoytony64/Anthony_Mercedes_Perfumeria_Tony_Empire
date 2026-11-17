@@ -1,21 +1,62 @@
-from odoo import models, fields
+from odoo import models, fields, api
+from odoo.exceptions import ValidationError
 
 class Perfumes(models.Model):
+    _name = "modulo_perfumeria.perfume"
+    _description = "Clase de Perfume"
 
-    _name ="modulo_perfumeria.perfume"
+    nombrePerfume = fields.Char(string="Nombre Perfume", required=True)
+    marcaPerfume = fields.Char(string="Marca Perfume", required=True)
+    precioPerfume = fields.Float(string="Precio Base", required=True, default=0.0)
+    stock = fields.Integer(string="Stock", default=0)
+    observacionesPefume = fields.Text(string="Observaciones")
+    disponible = fields.Boolean(string="Disponible", default=True)
 
-    _description = "Clase de perfume"
+    imagen = fields.Binary(string="Foto")
+    fechaLanzamiento = fields.Date(string="Fecha de Lanzamiento")
+    fechaRegistro = fields.Datetime(string="Fecha de Registro", default=fields.Datetime.now)
 
-    nombrePerfume= fields.Char(string="Nombre Perfume", required=True, help="Nombre del Perfume")
+    tipoPerfume = fields.Selection([
+        ('colonia', 'Agua de Colonia (EDC)'),
+        ('edt', 'Eau de Toilette (EDT)'),
+        ('edp', 'Eau de Parfum (EDP)'),
+        ('extracto', 'Extracto de Perfume')
+    ], string="Tipo de Perfume", default='edt')
 
-    marcaPerfume = fields.Char(string="Marca Perfume", required=True, help="Marca del Perfume")
+    precio_con_iva = fields.Float(
+        string="Precio con IVA",
+        compute="_compute_precio_con_iva",
+        store=True
+    )
 
-    precioPerfume = fields.Integer(string="Precio Perfume", help="Precio del Perfume")
-    
-    observacionesPefume = fields.Char(string="Observaciones Perfume", help="Observaciones del Perfume")
+    grupo_id = fields.Many2one('modulo_perfumeria.grupo', string="Grupo")
+    tienda_id = fields.Many2one('modulo_perfumeria.tienda', string="Tienda")
+    cliente_ids = fields.Many2many('modulo_perfumeria.cliente', string="Clientes")
 
-    tipoPerfume = fields.Selection([('edt','EDT'),('edp','EDP'),('extracto','EXTRACTO')],string="Tipo_de_Perfume")
+    @api.depends('precioPerfume')
+    def _compute_precio_con_iva(self):
+        for record in self:
+            if record.precioPerfume < 0:
+                raise ValidationError("El precio del perfume no puede ser negativo.")
+            record.precio_con_iva = record.precioPerfume * 1.21
 
-    grupo_id = fields.Many2one('modulo_perfumeria.grupo', string='Grupos')
+    @api.constrains('precioPerfume')
+    def _check_precio_unitario(self):
+        for record in self:
+            if record.precioPerfume <= 0:
+                raise ValidationError("El precio unitario debe ser mayor que 0.00.")
 
-    
+    @api.constrains('fechaLanzamiento')
+    def _check_fecha_lanzamiento(self):
+        for record in self:
+            if record.fechaLanzamiento and record.fechaLanzamiento > fields.Date.today():
+                raise ValidationError("La fecha de lanzamiento no puede ser una fecha futura.")
+
+    @api.onchange('tipoPerfume')
+    def _onchange_tipo_perfume(self):
+        if self.tipoPerfume == 'extracto':
+            self.observacionesPefume = "Fragancia de extracto puro. Aplicar poca cantidad."
+        elif self.tipoPerfume == 'colonia':
+            self.observacionesPefume = "Agua de colonia fresca para uso diario."
+        else:
+            self.observacionesPefume = False

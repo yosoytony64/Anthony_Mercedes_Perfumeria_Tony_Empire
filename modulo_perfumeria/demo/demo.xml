@@ -1,0 +1,106 @@
+<odoo>
+
+  <record id="demo_grupo_floral" model="modulo_perfumeria.grupo">
+    <field name="nombre">Gama Floral Elegance</field>
+    <field name="gama">alta</field>
+    <field name="familiaOlfativa">floral</field>
+    <field name="coleccion">clasica</field>
+    <field name="publico">mujeres</field>
+    <field name="fechaCreacion">2024-01-15</field>
+    <field name="descripcion">Gama basada en notas de flores blancas, jazmín y rosas.</field>
+    <field name="activo">True</field>
+  </record>
+
+  <record id="demo_grupo_amaderado" model="modulo_perfumeria.grupo">
+    <field name="nombre">Gama Woods and Spices</field>
+    <field name="gama">media</field>
+    <field name="familiaOlfativa">amaderada</field>
+    <field name="coleccion">estacional</field>
+    <field name="publico">hombres</field>
+    <field name="fechaCreacion">2024-03-20</field>
+    <field name="descripcion">Fragancias intensas con acordes de cedro, sándalo y pimienta.</field>
+    <field name="activo">True</field>
+  </record>
+
+  <record id="demo_tienda_madrid" model="modulo_perfumeria.tienda">
+    <field name="nombreTienda">Tony Empire - Gran Via</field>
+    <field name="direccionTienda">Calle Gran Via 28, Madrid</field>
+    <field name="telefonoTienda">912345678</field>
+    <field name="tipoTienda">flagship</field>
+    <field name="fechaInauguracion">2023-05-10</field>
+    <field name="observacionesTienda">Tienda insignia en el centro de Madrid.</field>
+    <field name="abierta">True</field>
+  </record>
+
+  <record id="demo_tienda_valencia" model="modulo_perfumeria.tienda">
+    <field name="nombreTienda">Tony Empire - Colon</field>
+    <field name="direccionTienda">Calle Colon 15, Valencia</field>
+    <field name="telefonoTienda">963456789</field>
+    <field name="tipoTienda">sucursal</field>
+    <field name="fechaInauguracion">2024-02-01</field>
+    <field name="observacionesTienda">Sucursal en zona comercial principal.</field>
+    <field name="abierta">True</field>
+  </record>
+
+  <record id="demo_cliente_1" model="modulo_perfumeria.cliente">
+    <field name="nombre">Alejandro</field>
+    <field name="apellido">Garcia Morales</field>
+    <field name="email">alejandro.garcia@email.com</field>
+    <field name="tipoCliente">vip</field>
+    <field name="esSocio">True</field>
+    <field name="fechaNacimiento">1995-04-12</field>
+    <field name="notas">Cliente VIP habitual, prefiere extractos y amaderados.</field>
+  </record>
+
+  <record id="demo_cliente_2" model="modulo_perfumeria.cliente">
+    <field name="nombre">Lucia</field>
+    <field name="apellido">Martinez Fernandez</field>
+    <field name="email">lucia.martinez@email.com</field>
+    <field name="tipoCliente">nuevo</field>
+    <field name="esSocio">False</field>
+    <field name="fechaNacimiento">2000-08-25</field>
+    <field name="notas">Interesada en fragancias frescas para uso diario.</field>
+  </record>
+
+  <record id="demo_perfume_1" model="modulo_perfumeria.perfume">
+    <field name="nombrePerfume">Imperial Rose</field>
+    <field name="marcaPerfume">Tony Empire</field>
+    <field name="precioPerfume">75.0</field>
+    <field name="stock">20</field>
+    <field name="tipoPerfume">edp</field>
+    <field name="grupo_id" ref="demo_grupo_floral"/>
+    <field name="tienda_id" ref="demo_tienda_madrid"/>
+    <field name="cliente_ids" eval="[(6, 0, [ref('demo_cliente_1'), ref('demo_cliente_2')])]"/>
+    <field name="fechaLanzamiento">2024-02-14</field>
+    <field name="observacionesPefume">Fragancia floral de alta intensidad con notas de rosa damascena.</field>
+    <field name="disponible">True</field>
+  </record>
+
+  <record id="demo_perfume_2" model="modulo_perfumeria.perfume">
+    <field name="nombrePerfume">Dark Cedar</field>
+    <field name="marcaPerfume">Tony Empire</field>
+    <field name="precioPerfume">60.0</field>
+    <field name="stock">15</field>
+    <field name="tipoPerfume">edt</field>
+    <field name="grupo_id" ref="demo_grupo_amaderado"/>
+    <field name="tienda_id" ref="demo_tienda_madrid"/>
+    <field name="cliente_ids" eval="[(6, 0, [ref('demo_cliente_1')])]"/>
+    <field name="fechaLanzamiento">2024-04-01</field>
+    <field name="observacionesPefume">Acordes secos de cedro de atlas y vetiver.</field>
+    <field name="disponible">True</field>
+  </record>
+
+  <record id="demo_perfume_3" model="modulo_perfumeria.perfume">
+    <field name="nombrePerfume">Elixir Imperial</field>
+    <field name="marcaPerfume">Tony Empire Privee</field>
+    <field name="precioPerfume">120.0</field>
+    <field name="stock">8</field>
+    <field name="tipoPerfume">extracto</field>
+    <field name="grupo_id" ref="demo_grupo_amaderado"/>
+    <field name="tienda_id" ref="demo_tienda_valencia"/>
+    <field name="fechaLanzamiento">2024-06-10</field>
+    <field name="observacionesPefume">Fragancia de extracto puro. Aplicar poca cantidad.</field>
+    <field name="disponible">True</field>
+  </record>
+
+</odoo>

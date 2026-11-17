@@ -1,55 +1,95 @@
 <odoo>
 
-  <!--Vista LIST -->
   <record id="view_perfume_list" model="ir.ui.view">
     <field name="name">modulo_perfumeria.perfume.list</field>
     <field name="model">modulo_perfumeria.perfume</field> 
     <field name="arch" type="xml">
-      <list string="Lista de los Perfumes">
-
+      <list string="Lista de Perfumes">
         <field name="nombrePerfume"/>
         <field name="marcaPerfume"/>
         <field name="precioPerfume"/>
-        <field name="observacionesPefume"/>
+        <field name="precio_con_iva"/>
+        <field name="stock"/>
         <field name="tipoPerfume"/>
-
+        <field name="grupo_id"/>
+        <field name="disponible"/>
+        <field name="fechaLanzamiento"/>
       </list>
     </field>
   </record>
 
-  <!-- Vista FORM -->
   <record id="view_perfume_form" model="ir.ui.view">
     <field name="name">modulo_perfumeria.perfume.form</field>
     <field name="model">modulo_perfumeria.perfume</field> 
     <field name="arch" type="xml">
       <form string="Ficha del Perfume">
         <sheet>
+          <field name="imagen" widget="image" class="oe_avatar"/>
+          <div class="oe_title">
+            <label for="nombrePerfume"/>
+            <h1><field name="nombrePerfume" placeholder="Nombre del perfume..."/></h1>
+            <label for="marcaPerfume"/>
+            <h3><field name="marcaPerfume" placeholder="Marca fabricante..."/></h3>
+          </div>
           <group>
-
-            <field name="nombrePerfume"/>
-            <field name="marcaPerfume"/>
-            <field name="precioPerfume"/>
-            <field name="observacionesPefume"/>
-            <field name="tipoPerfume"/>
-
+            <group string="Precios y Stock">
+              <field name="precioPerfume"/>
+              <field name="precio_con_iva"/>
+              <field name="stock"/>
+              <field name="disponible"/>
+            </group>
+            <group string="Clasificación">
+              <field name="tipoPerfume"/>
+              <field name="grupo_id"/>
+              <field name="tienda_id"/>
+              <field name="fechaLanzamiento"/>
+              <field name="fechaRegistro" readonly="1"/>
+            </group>
           </group>
+          <notebook>
+            <page string="Clientes Asociados">
+              <field name="cliente_ids"/>
+            </page>
+            <page string="Observaciones">
+              <field name="observacionesPefume"/>
+            </page>
+          </notebook>
         </sheet>
       </form>
     </field>
   </record>
 
-  <!-- Acción que enlaza ambas vistas -->
-  <record id="action_perfume" model="ir.actions.act_window">
-    <field name="name">PERFUMES</field>
-    <field name="res_model">modulo_perfumeria.perfume</field> 
-    <field name="view_mode">list,form</field> 
-    <field name="view_id" ref="view_perfume_list"/>
+  <record id="view_perfume_search" model="ir.ui.view">
+    <field name="name">modulo_perfumeria.perfume.search</field>
+    <field name="model">modulo_perfumeria.perfume</field>
+    <field name="arch" type="xml">
+      <search string="Buscar Perfumes">
+        <field name="nombrePerfume"/>
+        <field name="marcaPerfume"/>
+        <field name="grupo_id"/>
+        <separator/>
+        <filter string="Disponibles" name="filter_disponible" domain="[('disponible', '=', True)]"/>
+        <filter string="Extractos" name="filter_extracto" domain="[('tipoPerfume', '=', 'extracto')]"/>
+        <filter string="Eau de Parfum (EDP)" name="filter_edp" domain="[('tipoPerfume', '=', 'edp')]"/>
+        <filter string="Eau de Toilette (EDT)" name="filter_edt" domain="[('tipoPerfume', '=', 'edt')]"/>
+        <filter string="Stock Bajo (&lt; 5)" name="filter_stock_bajo" domain="[('stock', '&lt;', 5)]"/>
+        <separator/>
+        <filter string="Grupo / Gama" name="group_by_grupo" context="{'group_by': 'grupo_id'}"/>
+        <filter string="Tipo de Perfume" name="group_by_tipo" context="{'group_by': 'tipoPerfume'}"/>
+        <filter string="Marca" name="group_by_marca" context="{'group_by': 'marcaPerfume'}"/>
+      </search>
+    </field>
   </record>
 
-  <!-- Menús -->
-  <menuitem id="menu_perfumes_root" name="Gestionar los perfumes"/>
-  <menuitem id="menu_perfumes_modificar"
-            parent="menu_perfumes_root"
-            name="Perfumes"
-            action="action_perfume"/>
+  <record id="action_perfume" model="ir.actions.act_window">
+    <field name="name">Perfumes</field>
+    <field name="res_model">modulo_perfumeria.perfume</field> 
+    <field name="view_mode">list,form</field> 
+    <field name="search_view_id" ref="view_perfume_search"/>
+  </record>
+
+  <menuitem id="menu_perfumeria_root" name="Tony Empire Perfumería" sequence="10"/>
+  <menuitem id="menu_perfumes_categoria" parent="menu_perfumeria_root" name="Gestión" sequence="10"/>
+  <menuitem id="menu_perfumes_item" parent="menu_perfumes_categoria" name="Perfumes" action="action_perfume" sequence="10"/>
+
 </odoo>

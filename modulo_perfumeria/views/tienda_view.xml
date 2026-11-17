@@ -1,0 +1,79 @@
+<odoo>
+
+  <record id="view_tienda_list" model="ir.ui.view">
+    <field name="name">modulo_perfumeria.tienda.list</field>
+    <field name="model">modulo_perfumeria.tienda</field>
+    <field name="arch" type="xml">
+      <list string="Lista de Tiendas">
+        <field name="nombreTienda"/>
+        <field name="direccionTienda"/>
+        <field name="telefonoTienda"/>
+        <field name="tipoTienda"/>
+        <field name="abierta"/>
+        <field name="fechaInauguracion"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_tienda_form" model="ir.ui.view">
+    <field name="name">modulo_perfumeria.tienda.form</field>
+    <field name="model">modulo_perfumeria.tienda</field>
+    <field name="arch" type="xml">
+      <form string="Ficha de la Tienda">
+        <sheet>
+          <field name="fotoTienda" widget="image" class="oe_avatar"/>
+          <div class="oe_title">
+            <label for="nombreTienda"/>
+            <h1><field name="nombreTienda" placeholder="Nombre de la tienda..."/></h1>
+          </div>
+          <group>
+            <group string="Ubicación y Contacto">
+              <field name="direccionTienda"/>
+              <field name="telefonoTienda"/>
+              <field name="tipoTienda"/>
+              <field name="abierta"/>
+            </group>
+            <group string="Fechas">
+              <field name="fechaInauguracion"/>
+              <field name="fechaUltimaRevision" readonly="1"/>
+            </group>
+          </group>
+          <notebook>
+            <page string="Perfumes en esta Tienda">
+              <field name="perfume_ids"/>
+            </page>
+            <page string="Horarios y Observaciones">
+              <field name="observacionesTienda"/>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_tienda_search" model="ir.ui.view">
+    <field name="name">modulo_perfumeria.tienda.search</field>
+    <field name="model">modulo_perfumeria.tienda</field>
+    <field name="arch" type="xml">
+      <search string="Buscar Tiendas">
+        <field name="nombreTienda"/>
+        <field name="direccionTienda"/>
+        <separator/>
+        <filter string="Tiendas Abiertas" name="filter_abierta" domain="[('abierta', '=', True)]"/>
+        <separator/>
+        <filter string="Tipo de Tienda" name="group_by_tipo" context="{'group_by': 'tipoTienda'}"/>
+        <filter string="Operativa" name="group_by_abierta" context="{'group_by': 'abierta'}"/>
+      </search>
+    </field>
+  </record>
+
+  <record id="action_tienda" model="ir.actions.act_window">
+    <field name="name">Tiendas</field>
+    <field name="res_model">modulo_perfumeria.tienda</field>
+    <field name="view_mode">list,form</field>
+    <field name="search_view_id" ref="view_tienda_search"/>
+  </record>
+
+  <menuitem id="menu_tiendas_item" parent="menu_perfumes_categoria" name="Tiendas" action="action_tienda" sequence="40"/>
+
+</odoo>

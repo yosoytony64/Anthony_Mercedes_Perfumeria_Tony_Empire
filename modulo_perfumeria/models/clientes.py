@@ -9,3 +9,5 @@ class Vips(models.Model):
     tipoCliente = fields.Selection([('nuevo','Nuevo'),('ocasional','Ocasional'),('vip','Vip')],string="Tipo_de_Perfume")
 
     
+    
+    perfume_ids = fields.Many2many('modulo_perfumeria.perfume', 'cliente_perfume_rel', 'cliente_id', 'perfume_id', string='Perfumes')

@@ -1,0 +1,85 @@
+<odoo>
+
+  <record id="view_grupo_list" model="ir.ui.view">
+    <field name="name">modulo_perfumeria.grupo.list</field>
+    <field name="model">modulo_perfumeria.grupo</field>
+    <field name="arch" type="xml">
+      <list string="Lista de Grupos y Gamas">
+        <field name="nombre"/>
+        <field name="gama"/>
+        <field name="familiaOlfativa"/>
+        <field name="coleccion"/>
+        <field name="publico"/>
+        <field name="valor_total_grupo"/>
+        <field name="activo"/>
+        <field name="fechaCreacion"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="view_grupo_form" model="ir.ui.view">
+    <field name="name">modulo_perfumeria.grupo.form</field>
+    <field name="model">modulo_perfumeria.grupo</field>
+    <field name="arch" type="xml">
+      <form string="Ficha del Grupo">
+        <sheet>
+          <field name="imagen" widget="image" class="oe_avatar"/>
+          <div class="oe_title">
+            <label for="nombre"/>
+            <h1><field name="nombre" placeholder="Nombre de la gama / grupo..."/></h1>
+          </div>
+          <group>
+            <group string="Características Olfativas">
+              <field name="gama"/>
+              <field name="familiaOlfativa"/>
+              <field name="coleccion"/>
+              <field name="publico"/>
+            </group>
+            <group string="Datos y Totales">
+              <field name="valor_total_grupo"/>
+              <field name="activo"/>
+              <field name="fechaCreacion"/>
+              <field name="fechaRegistro" readonly="1"/>
+            </group>
+          </group>
+          <notebook>
+            <page string="Perfumes del Grupo">
+              <field name="perfume_ids"/>
+            </page>
+            <page string="Descripción">
+              <field name="descripcion"/>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_grupo_search" model="ir.ui.view">
+    <field name="name">modulo_perfumeria.grupo.search</field>
+    <field name="model">modulo_perfumeria.grupo</field>
+    <field name="arch" type="xml">
+      <search string="Buscar Grupos">
+        <field name="nombre"/>
+        <separator/>
+        <filter string="Activos" name="filter_activo" domain="[('activo', '=', True)]"/>
+        <filter string="Gama Alta" name="filter_alta" domain="[('gama', '=', 'alta')]"/>
+        <separator/>
+        <filter string="Gama" name="group_by_gama" context="{'group_by': 'gama'}"/>
+        <filter string="Familia Olfativa" name="group_by_familia" context="{'group_by': 'familiaOlfativa'}"/>
+        <filter string="Colección" name="group_by_coleccion" context="{'group_by': 'coleccion'}"/>
+        <filter string="Público" name="group_by_publico" context="{'group_by': 'publico'}"/>
+      </search>
+    </field>
+  </record>
+
+  <record id="action_grupo" model="ir.actions.act_window">
+    <field name="name">Grupos y Gamas</field>
+    <field name="res_model">modulo_perfumeria.grupo</field>
+    <field name="view_mode">list,form</field>
+    <field name="search_view_id" ref="view_grupo_search"/>
+  </record>
+
+  <menuitem id="menu_grupos_item" parent="menu_perfumes_categoria" name="Grupos / Gamas" action="action_grupo" sequence="20"/>
+
+</odoo>
